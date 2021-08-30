@@ -1,0 +1,217 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: deb.debian.org
+spec:
+  hosts:
+    - "*.debian.org"
+  ports:
+    - number: 80
+      protocol: HTTP
+    - number: 443
+      protocol: HTTPS
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: viome-uat-db-us-east-1
+spec:
+  hosts:
+    - "uat-viome-db.csw9u2ykgfdl.us-east-1.rds.amazonaws.com"
+  ports:
+    - number: 5432
+      name: tcp
+      protocol: TCP
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: viome-prod-db-us-east-1
+spec:
+  hosts:
+    - "viome-postgres-1.csw9u2ykgfdl.us-east-1.rds.amazonaws.com"
+  ports:
+    - number: 5432
+      name: tcp
+      protocol: TCP
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: dl-cdn.alpinelinux.org
+spec:
+  hosts:
+    - "*.alpinelinux.org"
+  ports:
+    - number: 80
+      protocol: HTTP
+    - number: 443
+      protocol: HTTPS
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: vie-conversation-agent-uat
+spec:
+  hosts:
+    - uat.vie.conv.agent
+  addresses:
+    - 192.168.0.17/32
+  ports:
+    - number: 9005
+      protocol: HTTP
+  location: MESH_EXTERNAL
+  resolution: NONE
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: vie-conversation-agent
+spec:
+  hosts:
+    - prod.vie.conv.agent
+  addresses:
+    - 192.168.0.39/32
+  ports:
+    - number: 9005
+      protocol: HTTP
+  location: MESH_EXTERNAL
+  resolution: NONE
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: amazonaws.com
+spec:
+  hosts:
+    - "*.amazonaws.com"
+  ports:
+    - number: 80
+      protocol: HTTP
+    - number: 443
+      protocol: HTTPS
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: external-aws-api
+spec:
+  hosts:
+    - credentials.awsapis.com
+    - 169.254.169.254
+  location: MESH_EXTERNAL
+  ports:
+    - number: 443
+      name: https
+      protocol: HTTPS
+    - number: 80
+      name: http
+      protocol: HTTP
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: tracking-db
+spec:
+  hosts:
+    - "tat-tracking-prod.csw9u2ykgfdl.us-east-1.rds.amazonaws.com"
+  ports:
+    - number: 5432
+      name: tcp
+      protocol: TCP
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: pop-gmail-com
+spec:
+  hosts:
+    - "pop.gmail.com"
+  ports:
+    - number: 995
+      name: tcp
+      protocol: TCP
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: secure-wms.com
+spec:
+  hosts:
+    - "secure-wms.com"
+  ports:
+    - number: 80
+      protocol: HTTP
+    - number: 443
+      protocol: HTTPS
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: spectrumoversee.com
+spec:
+  hosts:
+    - "*.spectrumoversee.com"
+  ports:
+    - number: 80
+      protocol: HTTP
+    - number: 443
+      protocol: HTTPS
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: deb-2.debian.org
+spec:
+  hosts:
+    - "deb.debian.org"
+    - 128.31.0.62
+  ports:
+    - number: 80
+      protocol: HTTP
+    - number: 443
+      protocol: HTTPS
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: security.debian.org
+spec:
+  hosts:
+    - "security.debian.org"
+  ports:
+    - number: 80
+      protocol: HTTP
+    - number: 443
+      protocol: HTTPS
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: gagan-viomephi
+spec:
+  hosts:
+    - "gagan-viomephi-dec-10.csw9u2ykgfdl.us-east-1.rds.amazonaws.com"
+  ports:
+    - number: 5432
+      name: tcp
+      protocol: TCP
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: ec2-elasticsearch-api
+spec:
+  hosts:
+    - product-id-gen-elasticsearch.viome.com
+    - 192.168.0.126
+  location: MESH_EXTERNAL
+  ports:
+    - number: 80
+      protocol: HTTP
+    - number: 443
+      protocol: HTTPS
+    - number: 9200
+      protocol: TCP
+    - number: 5601
+      protocol: TCP

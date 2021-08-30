@@ -1,0 +1,45 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: viome-prod
+  version: "1.19"
+  region: us-east-1
+  tags:
+    Owner: Tomas
+
+iam:
+  serviceRoleARN: arn:aws:iam::639670031158:role/eksServiceRole
+
+vpc:
+  id: "vpc-f467858c"
+  cidr: "192.168.0.0/16"
+  subnets:
+    private:
+      us-east-1d:
+        id: "subnet-02956dc5f07a77f3c"
+      us-east-1c:
+        id: "subnet-0643bacaf16408692"
+      us-east-1f:
+        id: "subnet-0d51fb807dc5baed3"
+    public:
+      us-east-1d:
+        id: "subnet-008a1e2d74a856419"
+      us-east-1c:
+        id: "subnet-06becc432675e5a1d"
+      us-east-1f:
+        id: "subnet-007b3ed3aa5b005a7"
+
+nodeGroups:
+  - name: viome-prod-ng-1-workers
+    iam:
+      attachPolicyARNs:
+        - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+        - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+        - arn:aws:iam::aws:policy/ElasticLoadBalancingFullAccess
+        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+    privateNetworking: false
+    ssh:
+      publicKeyPath: ~/.ssh/viome-prod-cluster.pub
+# Attach 'Allow SNS publish' to node instance profile
+# Add inline dynamodb.* to node instance profile

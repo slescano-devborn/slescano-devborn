@@ -1,0 +1,284 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: viome-gateway
+  namespace: default
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - "*.viome.com"
+        - "viaome.com"
+      tls:
+        httpsRedirect: true
+    - port:
+        number: 443
+        name: https
+        protocol: HTTP
+      hosts:
+        - "*.viome.com"
+        - "viaome.com"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: auth-service
+  namespace: test
+spec:
+  hosts:
+    - "testauth.viome.com"
+  gateways:
+    - default/viome-gateway
+  http:
+    # COMMENT: auth-service-v2 seems not to be used anymore
+    # - match:
+    #     - uri:
+    #         prefix: "/v2"
+    #     - uri:
+    #         prefix: "/v2/"
+    #   rewrite:
+    #     uri: ""
+    #   route:
+    #     - destination:
+    #         host: auth-service-v2
+    #         port:
+    #           number: 7070
+    - route:
+        - destination:
+            host: auth-service
+            port:
+              number: 9010
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: gateway-service
+  namespace: test
+spec:
+  hosts:
+    - "test-api.viome.com"
+  gateways:
+    - default/viome-gateway
+  http:
+    - route:
+        - destination:
+            host: gateway-service
+            port:
+              number: 9000
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: web-portal
+  namespace: test
+spec:
+  hosts:
+    - "team-tools-test.viome.com"
+  gateways:
+    - default/viome-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /app/
+      route:
+        - destination:
+            host: gateway-service
+            port:
+              number: 9000
+    - match:
+        - uri:
+            prefix: /appsite/login
+      rewrite:
+        uri: /app/authenticate/credentials
+      route:
+        - destination:
+            host: gateway-service
+            port:
+              number: 9000
+    - route:
+        - destination:
+            host: web-portal
+            port:
+              number: 3000
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: tat-tracking-service
+  namespace: test
+spec:
+  hosts:
+    - "tat-tracking.internal.viome.com"
+    - "tat-tracking-test.viome.com"
+  gateways:
+    - default/viome-gateway
+  http:
+    - route:
+        - destination:
+            host: tat-tracking-service
+            port:
+              number: 8080
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: xfe
+  namespace: test
+spec:
+  hosts:
+    - "test.viome.com"
+    - "glico-test.viome.com"
+  gateways:
+    - default/viome-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /app/
+      route:
+        - destination:
+            host: gateway-service
+            port:
+              number: 9000
+    - match:
+        - uri:
+            prefix: /spectrum/
+      route:
+        - destination:
+            host: product-id-generation-service
+            port:
+              number: 9040
+    - route:
+        - destination:
+            host: xfe
+            port:
+              number: 80
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: marketing-site
+  namespace: test
+spec:
+  hosts:
+    - "dev.viome.com"
+    - "viaome.com"
+  gateways:
+    - default/viome-gateway
+  http:
+    - route:
+        - destination:
+            host: next
+            port:
+              number: 80
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: phoenix-fe
+  namespace: test
+spec:
+  hosts:
+    - "internal-tools-test.viome.com"
+  gateways:
+    - default/viome-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /app/
+      route:
+        - destination:
+            host: gateway-service
+            port:
+              number: 9000
+    - match:
+        - uri:
+            prefix: /app
+      route:
+        - destination:
+            host: gateway-service
+            port:
+              number: 9000
+    - match:
+        - uri:
+            prefix: /appsite/login
+      rewrite:
+        uri: /app/authenticate/credentials
+      route:
+        - destination:
+            host: gateway-service
+            port:
+              number: 9000
+    - route:
+        - destination:
+            host: phoenix
+            port:
+              number: 80
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: update-kit-order-details
+  namespace: test
+spec:
+  hosts:
+    - "update-kit-order-details.internal.viome.com"
+  gateways:
+    - default/viome-gateway
+  http:
+    - route:
+        - destination:
+            host: update-kit-order-details
+            port:
+              number: 9002
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: kit-id-gen
+  namespace: test
+spec:
+  hosts:
+    - "kit-id-gen-test.viome.com"
+  gateways:
+    - default/viome-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /app/
+      route:
+        - destination:
+            host: gateway-service
+            port:
+              number: 9000
+    - match:
+        - uri:
+            prefix: /appsite/login
+      rewrite:
+        uri: /app/authenticate/credentials
+      route:
+        - destination:
+            host: gateway-service
+            port:
+              number: 9000
+    - match:
+        - uri:
+            prefix: /spectrum
+      rewrite:
+        uri: /app/kit-id-generator/spectrum
+      route:
+        - destination:
+            host: gateway-service
+            port:
+              number: 9000
+    - route:
+        - destination:
+            host: productidgeneratorui
+            port:
+              number: 80
+---
+

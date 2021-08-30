@@ -1,0 +1,206 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: deb.debian.org
+spec:
+  hosts:
+    - "*.debian.org"
+  ports:
+    - number: 80
+      protocol: HTTP
+      name: http
+    - number: 443
+      protocol: HTTPS
+      name: https
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: viome-test-db-us-east-1
+spec:
+  hosts:
+    - "test-viome-db.csw9u2ykgfdl.us-east-1.rds.amazonaws.com"
+  ports:
+    - number: 5432
+      name: tcp
+      protocol: TCP
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: dl-cdn.alpinelinux.org
+spec:
+  hosts:
+    - "*.alpinelinux.org"
+  ports:
+    - number: 80
+      protocol: HTTP
+      name: http
+    - number: 443
+      protocol: HTTPS
+      name: https
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: vie-conversation-agent
+spec:
+  hosts:
+    - vie.conv.agent
+  addresses:
+    - 192.168.6.65/32
+  ports:
+    - number: 9005
+      protocol: HTTP
+      name: vhttp
+  location: MESH_EXTERNAL
+  resolution: NONE
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: aws-sns
+spec:
+  hosts:
+    - sns.us-east-1.amazonaws.com
+  ports:
+    - number: 443
+      protocol: HTTPS
+      name: https
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: external-aws-api
+spec:
+  hosts:
+    - storage.googleapis.com
+  location: MESH_EXTERNAL
+  ports:
+    - number: 443
+      name: https
+      protocol: HTTPS
+    - number: 80
+      name: http
+      protocol: HTTP
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: search-viome-product-id
+spec:
+  hosts:
+    - "search-viome-product-id-be5pwvhkfhgl5xwhhebk7nqgoy.us-east-2.es.amazonaws.com"
+  ports:
+    - number: 80
+      protocol: HTTP
+      name: http
+    - number: 443
+      protocol: HTTPS
+      name: https
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: tracking-db
+spec:
+  hosts:
+    - "tracking.csw9u2ykgfdl.us-east-1.rds.amazonaws.com"
+  ports:
+    - number: 5432
+      name: tcp
+      protocol: TCP
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: ec2-elasticsearch-api
+spec:
+  hosts:
+    - product-id-gen-elasticsearch.viome.com
+  location: MESH_EXTERNAL
+  ports:
+    - number: 80
+      protocol: HTTP
+      name: http
+    - number: 443
+      protocol: HTTPS
+      name: https
+    - number: 9200
+      protocol: TCP
+      name: tcp-9200
+    - number: 5601
+      protocol: TCP
+      name: tcp-5601
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: pop-gmail-com
+spec:
+  hosts:
+    - "pop.gmail.com"
+  ports:
+    - number: 995
+      name: tcp
+      protocol: TCP
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: secure-wms.com
+spec:
+  hosts:
+    - "secure-wms.com"
+  ports:
+    - number: 80
+      protocol: HTTP
+      name: http
+    - number: 443
+      protocol: HTTPS
+      name: https
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: spectrumoversee.com
+spec:
+  hosts:
+    - "*.spectrumoversee.com"
+  ports:
+    - number: 80
+      protocol: HTTP
+      name: http
+    - number: 443
+      protocol: HTTPS
+      name: https
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: aws-sqs
+spec:
+  hosts:
+    - sqs.us-east-1.amazonaws.com
+  ports:
+    - number: 80
+      protocol: HTTP
+      name: http
+    - number: 443
+      protocol: HTTPS
+      name: https
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: api-gateway-arzra0wq5j
+spec:
+  hosts:
+    - "*.execute-api.us-east-1.amazonaws.com"
+  ports:
+    - number: 80
+      protocol: HTTP
+      name: http
+    - number: 443
+      protocol: HTTPS
+      name: https

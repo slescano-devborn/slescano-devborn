@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http
+    service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: "60"
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:us-east-1:639670031158:certificate/6e60e38e-781e-46d2-a878-1dc1ec2a03b7
+    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: https
+  finalizers:
+    - service.kubernetes.io/load-balancer-cleanup
+  labels:
+    app: istio-ingressgateway
+    install.operator.istio.io/owning-resource: unknown
+    install.operator.istio.io/owning-resource-namespace: istio-system
+    istio: ingressgateway
+    istio.io/rev: default
+    operator.istio.io/component: IngressGateways
+    operator.istio.io/managed: Reconcile
+    operator.istio.io/version: 1.9.0
+    release: istio
+  name: istio-ingressgateway
+  namespace: istio-system
+  resourceVersion: "3609"
+  selfLink: /api/v1/namespaces/istio-system/services/istio-ingressgateway
+  uid: 1f529f03-cbe6-4d8d-92bc-ac4bbc1538a6
+spec:
+  clusterIP: 10.100.123.18
+  externalTrafficPolicy: Cluster
+  ports:
+    - name: status-port
+      nodePort: 31667
+      port: 15021
+      protocol: TCP
+      targetPort: 15021
+    - name: http2
+      nodePort: 30469
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+    - name: https
+      nodePort: 32460
+      port: 443
+      protocol: TCP
+      targetPort: 8443
+    - name: tcp
+      nodePort: 31928
+      port: 31400
+      protocol: TCP
+      targetPort: 31400
+    - name: tls
+      nodePort: 31559
+      port: 15443
+      protocol: TCP
+      targetPort: 15443
+  selector:
+    app: istio-ingressgateway
+    istio: ingressgateway
+  sessionAffinity: None
+  type: LoadBalancer
+status:
+  loadBalancer:
+    ingress:
+      - hostname: a1f529f03cbe64d8d92bcac4bbc1538a-904182968.us-east-1.elb.amazonaws.com

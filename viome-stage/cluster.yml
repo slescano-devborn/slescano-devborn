@@ -1,0 +1,32 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: viome-stage
+  region: us-east-1
+  tags:
+    Owner: Tomas
+
+vpc:
+  id: "vpc-dc4281a6"
+  cidr: "192.168.0.0/16"
+  subnets:
+    private:
+      us-east-1a:
+        id: "subnet-cec18184"
+      us-east-1b:
+        id: "subnet-1b5ee347"
+    public:
+      us-east-1a:
+        id: "subnet-52c78718"
+      us-east-1b:
+        id: "subnet-f955e8a5"
+
+nodeGroups:
+  - name: ng-1-workers
+    privateNetworking: false
+    desiredCapacity: 7
+    ssh: #
+      publicKeyPath: ~/.ssh/viome_stage_rsa.pub
+# Attach 'Allow SNS publish' to node instance profile
+# Add inline dynamodb.* to node instance profile

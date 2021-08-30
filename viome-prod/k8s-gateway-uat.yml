@@ -1,0 +1,207 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: auth-service
+  namespace: uat
+spec:
+  hosts:
+    - "uatauth.viome.com"
+  gateways:
+    - default/viome-gateway
+  http:
+    - route:
+        - destination:
+            host: auth-service
+            port:
+              number: 9010
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: gateway-service
+  namespace: uat
+spec:
+  hosts:
+    - "uatgateway.viome.com"
+  gateways:
+    - default/viome-gateway
+  http:
+    - route:
+        - destination:
+            host: gateway-service
+            port:
+              number: 9000
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: web-portal
+  namespace: uat
+spec:
+  hosts:
+    - "team-tools-uat.viome.com"
+  gateways:
+    - default/viome-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /app/
+      route:
+        - destination:
+            host: gateway-service
+            port:
+              number: 9000
+    # - match:
+    #   - uri:
+    #       exact: /app
+    #   route:
+    #   - destination:
+    #       host: gateway-service
+    #       port:
+    #         number: 9000
+    - match:
+        - uri:
+            prefix: /img
+      route:
+        - destination:
+            host: web-portal
+            port:
+              number: 3000
+    - match:
+        - uri:
+            prefix: /appsite/login
+      rewrite:
+        uri: /app/authenticate/credentials
+      route:
+        - destination:
+            host: gateway-service
+            port:
+              number: 9000
+    - route:
+        - destination:
+            host: web-portal
+            port:
+              number: 3000
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: xfe
+  namespace: uat
+spec:
+  hosts:
+    - "uat.viome.com"
+  gateways:
+    - default/viome-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /app/
+      route:
+        - destination:
+            host: gateway-service
+            port:
+              number: 9000
+    - match:
+        - uri:
+            prefix: /img
+      route:
+        - destination:
+            host: web-portal
+            port:
+              number: 3000
+    - match:
+        - uri:
+            prefix: /appsite/login
+      rewrite:
+        uri: /app/authenticate/credentials
+      route:
+        - destination:
+            host: gateway-service
+            port:
+              number: 9000
+    - route:
+        - destination:
+            host: xfe
+            port:
+              number: 80
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: phoenix-fe
+  namespace: uat
+spec:
+  hosts:
+    - "internal-tools-uat.viome.com"
+  gateways:
+    - default/viome-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /app/
+      route:
+        - destination:
+            host: gateway-service
+            port:
+              number: 9000
+    - match:
+        - uri:
+            prefix: /app
+      route:
+        - destination:
+            host: gateway-service
+            port:
+              number: 9000
+    - match:
+        - uri:
+            prefix: /appsite/login
+      rewrite:
+        uri: /app/authenticate/credentials
+      route:
+        - destination:
+            host: gateway-service
+            port:
+              number: 9000
+    - route:
+        - destination:
+            host: phoenix
+            port:
+              number: 80
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: web-portal
+  namespace: uat
+spec:
+  hosts:
+    - "team-tools-uat.viome.com"
+  gateways:
+    - default/viome-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /app/
+      route:
+        - destination:
+            host: gateway-service
+            port:
+              number: 9000
+    - match:
+        - uri:
+            prefix: /appsite/login
+      rewrite:
+        uri: /app/authenticate/credentials
+      route:
+        - destination:
+            host: gateway-service
+            port:
+              number: 9000
+    - route:
+        - destination:
+            host: web-portal
+            port:
+              number: 3000
+---
+
