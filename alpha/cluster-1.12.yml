@@ -1,0 +1,35 @@
+apiVersion: eksctl.io/v1alpha4
+kind: ClusterConfig
+
+metadata:
+  name: viome-alpha
+  version: "1.12"
+  region: us-east-1
+  tags:
+    Owner: Medet
+
+vpc:
+  id: "vpc-f467858c"
+  cidr: "192.168.0.0/16"
+  subnets:
+    private:
+      us-east-1d:
+        id: "subnet-02956dc5f07a77f3c"
+      us-east-1c:
+        id: "subnet-0643bacaf16408692"
+      us-east-1f:
+        id: "subnet-0d51fb807dc5baed3"
+    public:
+      us-east-1d:
+        id: "subnet-008a1e2d74a856419"
+      us-east-1c:
+        id: "subnet-06becc432675e5a1d"
+      us-east-1f:
+        id: "subnet-007b3ed3aa5b005a7"
+
+nodeGroups:
+  - name: ng-1-workers
+    privateNetworking: false
+    allowSSH: true
+# Attach 'Allow SNS publish' to node instance profile
+# Add inline dynamodb.* to node instance profile
